@@ -7,8 +7,8 @@ const Item: React.FC<Item> = ({ name, price, imgUrl }) => {
             <div className="flex justify-between">
 
                 <div className='pt-4 pl-2'>
-                    <h3 className='text-secondary text-md font-medium'>{name}</h3>
-                    <p className='text-dark text-lg font-bold'>${price}</p>
+                    <h3 className='text-secondary text-md font-medium subpixel-antialiased'>{name}</h3>
+                    <p className='text-dark text-lg font-bold subpixel-antialiased'>${price}</p>
                 </div>
                 <div className='flex items-end pb-1 pr-2'>
                     <button className="bg-dark h-max p-1">

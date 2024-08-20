@@ -11,6 +11,10 @@ const config: Config = {
       primary: '#fdf8f3',
       secondary: '#7d7d7d',
       dark: '#191919',
+      white: '#ffffff',
+      peach: '#f9d9b3',
+      warmPeach: '#FFE6CA',
+      paleLavender: '#ddd0e3'
     },
     extend: {
       backgroundImage: {
