@@ -1,47 +1,24 @@
 'use client'
 
 import Head from "next/head"
-import MainCover from "./components/mainCover"
+import MainCover from "./components/main-cover"
 import Header from "./components/header"
 import ItemCarousel from "./components/item-carousel";
 import CategoryCarousel from "./components/category-carousel";
 import { Footer } from "./components/footer";
+import { useEffect, useState } from "react";
+import MainLayout from "./layouts/main";
 
 
 export default function Example() {
-   const itemList: Item[] = [
-      {
-         "name": "Item 1",
-         "price": 100,
-         "imgUrl": "https://maxstore365.s3.amazonaws.com/flower3.png"
-      },
-      {
-         "name": "Item 2",
-         "price": 200,
+   const [itemList, setItemList] = useState<Item[]>([]);
 
-         "imgUrl": "https://maxstore365.s3.amazonaws.com/flower2.png"
-      },
-      {
-         "name": "Item 3",
-         "price": 300,
-         "imgUrl": "https://maxstore365.s3.amazonaws.com/flower4.png"
-      },
-      {
-         "name": "Item 4",
-         "price": 400,
-         "imgUrl": "https://maxstore365.s3.amazonaws.com/flower3.png"
-      },
-      {
-         "name": "Item 5",
-         "price": 500,
-         "imgUrl": "https://maxstore365.s3.amazonaws.com/flower2.png"
-      },
-      {
-         "name": "Item 6",
-         "price": 600,
-         "imgUrl": "https://maxstore365.s3.amazonaws.com/flower4.png"
-      }
-   ];
+   useEffect(() => {
+      fetch("http://localhost:3000/item")
+         .then(response => response.json())
+         .then(data => setItemList(data))
+         .catch(error => console.log(error));
+   }, []);
 
    const categoryList: CategoryItem[] = [
       {
@@ -59,17 +36,15 @@ export default function Example() {
    ];
 
    return (
-      <div className="bg-white">
-         <Header />
+      <MainLayout>
          <MainCover />
          <div className="container mx-auto">
             <ItemCarousel items={itemList} />
             <CategoryCarousel items={categoryList} />
+            <div className="text-dark">
+            </div>
             <ItemCarousel title="New Arrivals" items={itemList} />
          </div>
-         <div className="container mx-auto bg-primary">
-            <Footer />
-         </div>
-      </div>
+      </MainLayout>
    );
 }

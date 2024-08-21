@@ -13,8 +13,14 @@ const config: Config = {
       dark: '#191919',
       white: '#ffffff',
       peach: '#f9d9b3',
+      black: '#000000',
       warmPeach: '#FFE6CA',
-      paleLavender: '#ddd0e3'
+      paleLavender: '#ddd0e3',
+      indigo: {
+        500: '#374151',
+        600: '#4f46e5',
+        700: '#4338ca'
+      }
     },
     extend: {
       backgroundImage: {

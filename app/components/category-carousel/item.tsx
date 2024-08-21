@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Item: React.FC<CategoryItem> = ({ name, imgUrl, }) => {
+const Item: React.FC<CategoryItem> = ({ name, imgUrl}) => {
     return (
         <div className={`border-r border-secondary bg-peach text-center h-[350px] bg-cover content-center`} style={{ backgroundImage: `url(${imgUrl})` }}>
             <div className="flex flex-col backdrop-grayscale">

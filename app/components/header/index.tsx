@@ -1,6 +1,9 @@
+'use client';
+
 import React, { useEffect, useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
+import { usePathname } from 'next/navigation';
 
 interface HeaderProps {
 }
@@ -8,6 +11,8 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [navBg, setNavBg] = useState(false);
+  const pathname = usePathname();
+  const isItemRoute = pathname.includes('/item');
 
   const changeNavBg = () => {
    window.scrollY >= 200 ? setNavBg(true) : setNavBg(false);
@@ -28,7 +33,7 @@ const Header: React.FC<HeaderProps> = () => {
   ]
 
   return (
-    <header className={`fixed inset-x-0 top-0 z-50 ${navBg ? 'bg-white text-dark' : ''}`} >
+    <header className={`${!isItemRoute ? 'fixed' : 'relative text-dark'} inset-x-0 top-0 z-50 ${!isItemRoute && navBg ? 'bg-white text-dark' : ''}`} >
       <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
         <div className="flex lg:flex-1">
           <a href="#" className="">

@@ -1,6 +1,9 @@
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
-const Item: React.FC<Item> = ({ name, price, imgUrl }) => {
+const Item: React.FC<Item> = ({ name, price, imgUrl,_id }) => {
+    const router = useRouter();
+
     return (
         <div style={{ background: '#ffffff' }} className='border-r border-secondary'>
             <img src={imgUrl} alt={name} className='w-full' />
@@ -11,7 +14,7 @@ const Item: React.FC<Item> = ({ name, price, imgUrl }) => {
                     <p className='text-dark text-lg font-bold subpixel-antialiased'>${price}</p>
                 </div>
                 <div className='flex items-end pb-1 pr-2'>
-                    <button className="bg-dark h-max p-1">
+                    <button className="bg-dark h-max p-1" onClick={() => router.push(`item/${_id}`)}>
                         <img src='/images/icons/add-to-cart.png' alt='add-to-cart' className='w-[30px]' />
                     </button>
                 </div>
