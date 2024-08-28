@@ -1,14 +1,29 @@
 import { useRouter } from 'next/navigation';
 import React from 'react';
 
-const Item: React.FC<Item> = ({ name, price, imgUrl,_id }) => {
+const Item: React.FC<Item> = ({ name, price, imgUrl, _id }) => {
     const router = useRouter();
+
+    const [imageLoaded, setImageLoaded] = React.useState(false);
+
+    const handleImageLoad = () => {
+        setImageLoaded(true);
+    };
 
     return (
         <div style={{ background: '#ffffff' }} className='border-r border-secondary'>
-            <img src={imgUrl} alt={name} className='w-full' />
+            {!imageLoaded && (
+                <div className='w-full h-60 flex items-center justify-center bg-grey-500'>
+                    <div className='animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary'></div>
+                </div>
+            )}
+            <img
+                src={imgUrl}
+                alt={name}
+                className={`w-full ${imageLoaded ? '' : 'invisible h-0'}`}
+                onLoad={handleImageLoad}
+            />
             <div className="flex justify-between">
-
                 <div className='pt-4 pl-2'>
                     <h3 className='text-secondary text-md font-medium subpixel-antialiased'>{name}</h3>
                     <p className='text-dark text-lg font-bold subpixel-antialiased'>${price}</p>

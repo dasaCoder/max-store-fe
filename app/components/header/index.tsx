@@ -4,6 +4,9 @@ import React, { useEffect, useState } from 'react'
 import { Dialog, DialogPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { usePathname } from 'next/navigation';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/app/lib/store';
+import {Cart} from '@/app/components/cart';
 
 interface HeaderProps {
 }
@@ -13,6 +16,8 @@ const Header: React.FC<HeaderProps> = () => {
   const [navBg, setNavBg] = useState(false);
   const pathname = usePathname();
   const isItemRoute = pathname.includes('/item');
+  const cart = useSelector((state: RootState) => state.cart.items);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
   const changeNavBg = () => {
    window.scrollY >= 200 ? setNavBg(true) : setNavBg(false);
@@ -33,7 +38,7 @@ const Header: React.FC<HeaderProps> = () => {
   ]
 
   return (
-    <header className={`${!isItemRoute ? 'fixed' : 'relative text-dark'} inset-x-0 top-0 z-50 ${!isItemRoute && navBg ? 'bg-white text-dark' : ''}`} >
+    <header className={`${!isItemRoute ? 'fixed' : 'relative text-dark'} inset-x-0 top-0 z-10 ${!isItemRoute && navBg ? 'bg-white text-dark shadow-md' : ''}`} >
       <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
         <div className="flex lg:flex-1">
           <a href="#" className="">
@@ -63,9 +68,11 @@ const Header: React.FC<HeaderProps> = () => {
           ))}
         </div>
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
+          {/* <a href="#" className="text-sm font-semibold leading-6 text-gray-900">
             Log in <span aria-hidden="true">&rarr;</span>
-          </a>
+          </a> */}
+          <span>Cart Count: {cart.length}</span>
+          <button onClick={() => setIsCartOpen(!isCartOpen)}>Cart {isCartOpen ? 'true': 'false'}</button>
         </div>
       </nav>
       <Dialog open={mobileMenuOpen} onClose={setMobileMenuOpen} className="lg:hidden">
@@ -114,6 +121,7 @@ const Header: React.FC<HeaderProps> = () => {
           </div>
         </DialogPanel>
       </Dialog>
+      <Cart open={isCartOpen}/>
     </header>
   );
 };

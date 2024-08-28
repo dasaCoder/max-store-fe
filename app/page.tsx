@@ -10,7 +10,7 @@ import { useEffect, useState } from "react";
 import MainLayout from "./layouts/main";
 
 
-export default function Example() {
+export default function App() {
    const [itemList, setItemList] = useState<Item[]>([]);
 
    useEffect(() => {

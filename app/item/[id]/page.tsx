@@ -2,9 +2,12 @@
 import React, { useEffect, useState } from 'react';
 import MainLayout from '../../layouts/main';
 import ColorSelector from '../../components/color-selector';
+import { addItem } from '@/app/lib/features/cart/cart-slice';
+import { useAppDispatch } from '@/app/lib/hooks';
+import StoreProvider from '@/app/store-provider';
 
 const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
-
+    const dispatch = useAppDispatch();
     const [item, setItem] = useState<Item | undefined>(undefined);
 
     useEffect(() => {
@@ -17,7 +20,6 @@ const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
     return (
         <MainLayout>
             <div className="max-w-5xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
-                {/* Image Gallery */}
                 <div>
                     <img
                         className="w-full h-auto object-cover rounded-lg"
@@ -38,7 +40,6 @@ const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
                     </div>
                 </div>
 
-                {/* Product Details */}
                 <div className='text-dark'>
                     <h1 className="text-2xl font-bold">{item?.name}</h1>
                     <p className="text-xl font-semibold mt-2">${item?.price}</p>
@@ -69,6 +70,17 @@ const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
 
                     <button
                         className="mt-6 bg-indigo-600 text-white py-3 px-6 rounded-lg w-full hover:bg-indigo-700 transition-colors"
+                        onClick={() => {
+                            if(item) {
+                                dispatch(addItem({
+                                    id: item._id,
+                                    name: item.name,
+                                    price: item.price,
+                                    imgUrl: item.imgUrl,
+                                    quantity: 1
+                                }))
+                            }
+                        }}
                     >
                         Add to bag
                     </button>
