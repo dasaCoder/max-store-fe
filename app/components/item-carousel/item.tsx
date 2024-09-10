@@ -29,7 +29,7 @@ const Item: React.FC<Item> = ({ name, price, imgUrl, _id }) => {
                     <p className='text-dark text-lg font-bold subpixel-antialiased'>${price}</p>
                 </div>
                 <div className='flex items-end pb-1 pr-2'>
-                    <button className="bg-dark h-max p-1" onClick={() => router.push(`item/${_id}`)}>
+                    <button className="bg-dark h-max p-1" onClick={() => router.push(`/item/${_id}`)}>
                         <img src='/images/icons/add-to-cart.png' alt='add-to-cart' className='w-[30px]' />
                     </button>
                 </div>

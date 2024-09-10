@@ -28,9 +28,9 @@ const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
 
     return (
         <MainLayout>
-            <div className="max-w-5xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-8 my-[75px]">
+            <div className="max-w-5xl mx-auto p-6 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-2 gap-8 my-[75px]">
                 <div>
-                    <div className='bg-gray-100'>
+                    <div className='bg-gray-10'>
                         <img
                             className="w-full h-auto object-cover rounded-lg"
                             src={item?.imgUrl}
@@ -139,7 +139,7 @@ const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
                 </div>
             </div>
 
-            <div className="container mx-auto">
+            <div className="container mx-auto px-5">
                 <ItemCarousel title="You might also like..." items={suggestedItemList} />
             </div>
         </MainLayout>

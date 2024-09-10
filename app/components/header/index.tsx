@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/lib/store';
 import { Cart } from '@/app/components/cart';
+import { useRouter } from 'next/navigation';
 
 interface HeaderProps {
 }
@@ -14,11 +15,14 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [navBg, setNavBg] = useState(false);
+  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [search, setSearch] = useState('');
+
+  const router = useRouter();
   const pathname = usePathname();
+
   const isHomePage = pathname === '/';
   const cart = useSelector((state: RootState) => state.cart.items);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-
 
   const changeNavBg = () => {
     window.scrollY >= 200 ? setNavBg(true) : setNavBg(false);
@@ -30,6 +34,13 @@ const Header: React.FC<HeaderProps> = () => {
       window.removeEventListener('scroll', changeNavBg);
     }
   }, []);
+
+  const handleSearch = () => {
+    if (search === '') {
+      return;
+    }
+    router.push(`/search/${search}`);
+  }
 
 
   return (
@@ -68,11 +79,13 @@ const Header: React.FC<HeaderProps> = () => {
         <div className="hidden lg:flex lg:gap-x-12">
           <div className="relative">
             <input
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
               type="text"
               placeholder="Search"
               className="py-2 px-4 pr-10 text-dark rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-[500px]"
             />
-            <button className="absolute top-0 right-0 h-full px-3 flex items-center text-dark">
+            <button className="absolute top-0 right-0 h-full px-3 flex items-center text-dark" onClick={handleSearch}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
               </svg>

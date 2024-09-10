@@ -23,6 +23,7 @@ const config: Config = {
         700: '#4338ca'
       },
       gray: {
+        10: '#f7f7f7',
         50: '#f9fafb',
         100: '#f3f4f6',
         200: '#e5e7eb',
