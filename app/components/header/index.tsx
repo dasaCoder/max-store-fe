@@ -31,23 +31,17 @@ const Header: React.FC<HeaderProps> = () => {
     }
   }, []);
 
-  const navigation = [
-    { name: 'Product', href: '#' },
-    { name: 'Features', href: '#' },
-    { name: 'Marketplace', href: '#' },
-    { name: 'Company', href: '#' },
-  ]
 
   return (
     <header className={`${isHomePage ? 'fixed' : 'relative text-dark'} inset-x-0 top-0 z-10 ${!isHomePage || navBg ? 'bg-white text-dark shadow-md' : ''}`} >
-      <nav aria-label="Global" className="flex items-center justify-between p-6 lg:px-8">
+      <nav aria-label="Global" className="flex items-center justify-between px-6 py-3 lg:px-8">
         <div className="flex lg:flex-1">
           <a href="/" className="">
             <span className="sr-only">Max Store</span>
             <img
               alt=""
-              src={navBg ? "/images/mini-max-logo.png" : "/images/max-logo.png"}
-              className={navBg ? "h-[40px]" : "h-[80px]"}
+              src={navBg || !isHomePage ? "/images/mini-max-logo.png" : "/images/max-logo.png"}
+              className={navBg || !isHomePage ? "h-[40px]" : "h-[80px]"}
             />
           </a>
         </div>
@@ -56,6 +50,9 @@ const Header: React.FC<HeaderProps> = () => {
         <div className="flex lg:hidden">
           <button onClick={() => setIsCartOpen(!isCartOpen)} className='pr-2'>
             <img src="/images/icons/icon-cart.png" className='w-[30px]' alt="" />
+            <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
+              {cart.length}
+            </span>
           </button>
           <button
             type="button"
@@ -69,17 +66,28 @@ const Header: React.FC<HeaderProps> = () => {
         </div>
 
         <div className="hidden lg:flex lg:gap-x-12">
-          {navigation.map((item) => (
-            <a key={item.name} href={item.href} className="text-sm font-semibold leading-6 text-gray-900">
-              {item.name}
-            </a>
-          ))}
+          <div className="relative">
+            <input
+              type="text"
+              placeholder="Search"
+              className="py-2 px-4 pr-10 text-dark rounded-lg border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent w-[500px]"
+            />
+            <button className="absolute top-0 right-0 h-full px-3 flex items-center text-dark">
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
+                <path strokeLinecap="round" strokeLinejoin="round" d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z" />
+              </svg>
+            </button>
+          </div>
         </div>
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <button onClick={() => setIsCartOpen(!isCartOpen)} className='pr-2'>
-            <img src="/images/icons/icon-cart.png" className='w-[30px]' alt="" />
+          <button onClick={() => setIsCartOpen(!isCartOpen)} className="relative pr-2">
+            <img src="/images/icons/icon-cart.png" className="w-[30px]" alt="Cart" />
+            <span className="absolute top-0 right-[10px] bg-indigo-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs transform translate-x-1/2 -translate-y-1/2">
+              {cart.length}
+            </span>
           </button>
+
           <button>
             <img src="/images/icons/icon-user.png" className='w-[30px]' alt="" />
           </button>
@@ -108,17 +116,7 @@ const Header: React.FC<HeaderProps> = () => {
           </div>
           <div className="mt-6 flow-root">
             <div className="-my-6 divide-y divide-gray-500/10">
-              <div className="space-y-2 py-6">
-                {navigation.map((item) => (
-                  <a
-                    key={item.name}
-                    href={item.href}
-                    className="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 text-gray-900 hover:bg-gray-50"
-                  >
-                    {item.name}
-                  </a>
-                ))}
-              </div>
+
               <div className="py-6">
                 <a
                   href="#"

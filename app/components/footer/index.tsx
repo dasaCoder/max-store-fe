@@ -4,7 +4,7 @@ export function Footer() {
     return (
      
 
-<footer className="bg-white dark:bg-gray-900 text-dark mt-10">
+<footer className="bg-gray-900 text-white mt-10 container mx-auto ">
     <div className="w-full py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0">

@@ -11,7 +11,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div>
                 {children}
             </div>
-            <div className="container mx-auto bg-primary">
+            <div className="bg-gray-900">
                 <Footer />
             </div>
         </div>

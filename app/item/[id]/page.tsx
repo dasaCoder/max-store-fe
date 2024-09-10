@@ -1,33 +1,44 @@
 'use client';
 import React, { useEffect, useState } from 'react';
 import MainLayout from '../../layouts/main';
-import ColorSelector from '../../components/color-selector';
 import { addItem } from '@/app/lib/features/cart/cart-slice';
 import { useAppDispatch } from '@/app/lib/hooks';
-import StoreProvider from '@/app/store-provider';
+import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
+import { ChevronDownIcon } from '@heroicons/react/16/solid';
+import ItemCarousel from '@/app/components/item-carousel';
 
 const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
     const dispatch = useAppDispatch();
     const [item, setItem] = useState<Item | undefined>(undefined);
 
+    const [suggestedItemList, setSuggestedItemList] = useState<Item[]>([]);
+
+
     useEffect(() => {
-        fetch(`http://localhost:3000/item/${params.id}`)
-           .then(response => response.json())
-           .then(data => setItem(data))
-           .catch(error => console.log(error));
-     }, []);
-     
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/item/${params.id}`)
+            .then(response => response.json())
+            .then(data => setItem(data))
+            .catch(error => console.log(error));
+
+        fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/item`)
+            .then(response => response.json())
+            .then(data => setSuggestedItemList(data))
+            .catch(error => console.log(error));
+    }, []);
+
     return (
         <MainLayout>
-            <div className="max-w-5xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div className="max-w-5xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-8 my-[75px]">
                 <div>
-                    <img
-                        className="w-full h-auto object-cover rounded-lg"
-                        src={item?.imgUrl}
-                        alt="Product"
-                    />
+                    <div className='bg-gray-100'>
+                        <img
+                            className="w-full h-auto object-cover rounded-lg"
+                            src={item?.imgUrl}
+                            alt="Product"
+                        />
+                    </div>
                     <div className="flex mt-4 space-x-4">
-                        
+
                         {item?.images?.map((url: string, index: number) => (
                             <img
                                 key={index}
@@ -36,7 +47,7 @@ const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
                                 alt="Product"
                             />
                         ))}
-                        
+
                     </div>
                 </div>
 
@@ -71,7 +82,7 @@ const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
                     <button
                         className="mt-6 bg-indigo-600 text-white py-3 px-6 rounded-lg w-full hover:bg-indigo-700 transition-colors"
                         onClick={() => {
-                            if(item) {
+                            if (item) {
                                 dispatch(addItem({
                                     id: item._id,
                                     name: item.name,
@@ -85,33 +96,51 @@ const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
                         Add to bag
                     </button>
 
-                    <div className="mt-6 border-t border-gray-200 pt-6 space-y-6 text-gray-600">
-                        <div>
-                            <button className="flex justify-between w-full text-left font-medium text-gray-900">
-                                Features
-                                <span className="ml-6 flex items-center">+</span>
-                            </button>
-                        </div>
-                        <div>
-                            <button className="flex justify-between w-full text-left font-medium text-gray-900">
-                                Care
-                                <span className="ml-6 flex items-center">+</span>
-                            </button>
-                        </div>
-                        <div>
-                            <button className="flex justify-between w-full text-left font-medium text-gray-900">
-                                Shipping
-                                <span className="ml-6 flex items-center">+</span>
-                            </button>
-                        </div>
-                        <div>
-                            <button className="flex justify-between w-full text-left font-medium text-gray-900">
-                                Returns
-                                <span className="ml-6 flex items-center">+</span>
-                            </button>
+                    <div className="w-full pt-5 text-dark">
+                        <div className="mx-auto w-full max-w-lg divide-y divide-dark/5 rounded-xl bg-dark/5">
+                            <Disclosure as="div" className="p-6" defaultOpen={false}>
+                                <DisclosureButton className="group flex w-full items-center justify-between">
+                                    <span className="text-sm font-medium text-dark group-data-[hover]:text-dark/80">
+                                        Features
+                                    </span>
+                                    <ChevronDownIcon className="size-5 fill-dark/60 group-data-[hover]:fill-dark/50 group-data-[open]:rotate-180" />
+                                </DisclosureButton>
+                                <DisclosurePanel className="mt-2 text-sm/5 text-dark/50">
+                                    // features
+                                </DisclosurePanel>
+                            </Disclosure>
+                            <Disclosure as="div" className="p-6" defaultOpen={false}>
+                                <DisclosureButton className="group flex w-full items-center justify-between">
+                                    <span className="text-sm font-medium text-dark group-data-[hover]:text-dark/80">
+                                        Shipping
+                                    </span>
+                                    <ChevronDownIcon className="size-5 fill-dark/60 group-data-[hover]:fill-dark/50 group-data-[open]:rotate-180" />
+                                </DisclosureButton>
+                                <DisclosurePanel className="mt-2 text-sm/5 text-dark/50">
+                                    // features
+                                </DisclosurePanel>
+                            </Disclosure>
+                            <Disclosure as="div" className="p-6" defaultOpen={false}>
+                                <DisclosureButton className="group flex w-full items-center justify-between">
+                                    <span className="text-sm font-medium text-dark group-data-[hover]:text-dark/80">
+                                        Our return policy
+                                    </span>
+                                    <ChevronDownIcon className="size-5 fill-dark/60 group-data-[hover]:fill-dark/50 group-data-[open]:rotate-180" />
+                                </DisclosureButton>
+                                <DisclosurePanel className="mt-2 text-sm/5 text-dark/50">
+                                    // features
+                                </DisclosurePanel>
+                            </Disclosure>
+
                         </div>
                     </div>
+
+
                 </div>
+            </div>
+
+            <div className="container mx-auto">
+                <ItemCarousel title="You might also like..." items={suggestedItemList} />
             </div>
         </MainLayout>
     );
