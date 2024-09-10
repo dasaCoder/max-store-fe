@@ -15,8 +15,12 @@ export interface CartState {
 }
 
 const initialState: CartState = {
-    items: [],
-    subtotal: 0
+    items: JSON.parse(localStorage.getItem('cartItems') || '[]'),
+    subtotal: calculateSubtotal(JSON.parse(localStorage.getItem('cartItems') || '[]'))
+}
+
+const updateLocalStorage = (items: CartItem[]) => {
+    localStorage.setItem('cartItems', JSON.stringify(items));
 }
 
 export const cartSlice = createSlice({
@@ -31,10 +35,12 @@ export const cartSlice = createSlice({
                 state.items.push(action.payload)
             }
             state.subtotal = calculateSubtotal(state.items)
+            updateLocalStorage(state.items);
         },
         removeItem: (state, action: PayloadAction<string>) => {
             state.items = state.items.filter(item => item.id !== action.payload)
             state.subtotal = calculateSubtotal(state.items)
+            updateLocalStorage(state.items);
         },
         updateQuantity: (state, action: PayloadAction<{ id: string, quantity: number }>) => {
             const item = state.items.find(item => item.id === action.payload.id)
@@ -42,6 +48,7 @@ export const cartSlice = createSlice({
                 item.quantity = action.payload.quantity
             }
             state.subtotal = calculateSubtotal(state.items)
+            updateLocalStorage(state.items);
         }
     }
 });

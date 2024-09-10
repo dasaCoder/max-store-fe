@@ -1,5 +1,5 @@
 'use client';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { RootState } from '../lib/store';
 import { useSelector } from 'react-redux';
 import DeliveryDetails from '../components/checkout/delivery-details';
@@ -9,21 +9,61 @@ import DeliveryMethod from '../components/checkout/delivery-method';
 import MainLayout from '../layouts/main';
 import { FormikProps, useFormik } from 'formik';
 import checkoutFormSchema from '../schema/checkout-form';
+import * as crypto from 'crypto';
+import axios from 'axios';
+
+function md5(value: string): string {
+    return crypto.createHash('md5').update(value).digest('hex');
+}
 
 export default function CheckoutForm() {
     const { items, subtotal } = useSelector((state: RootState) => state.cart);
+    const merchantId = process.env.NEXT_PUBLIC_PAYHERE_MERCHANT_ID || '';
+    const backEndHost = process.env.NEXT_PUBLIC_BACKEND_HOST || '';
+    const getHashEndPoint = process.env.NEXT_PUBLIC_PAYHERE_HASH_ENDPOINT || '';
+    const returnURl = process.env.NEXT_PUBLIC_PAYHERE_RETURN_URL || "";
+    const cancelUrl = process.env.NEXT_PUBLIC_PAYHERE_CANCEL_URL || "";
+    const notifyUrl = process.env.NEXT_PUBLIC_PAYHERE_NOTIFY_URL || "";
+    const [hash, setHash] = useState('');
+    const [payhereHash, setPayhereHash] = useState('');
+    const currency = 'LKR';
+    const orderId = '123456789';
+
     const paymentForm = useFormik({
         validationSchema: checkoutFormSchema,
         initialValues: {
-            firstName: '',
-            email: '',
-            city: '',
-            companyName: '',
+            first_name: 'sdfs',
+            last_name: 'dsfds',
+            phone: '232342343',
+            email: 's@g.com',
+            city: 'sdfsd',
+            companyName: 'sdfs',
         },
         onSubmit: (values) => {
             console.log(values);
         }
     });
+
+    useEffect(() => {
+        const fetchHash = async () => {
+            try {
+                const response = await axios.get(`${backEndHost}/${getHashEndPoint}`);
+                const { hash } = response.data;
+                setHash(hash);
+            } catch (error) {
+                console.error('Error fetching hash:', error);
+            }
+        };
+
+        fetchHash();
+    }, []);
+
+    useEffect(() => {
+        console.log('hash',`${merchantId}${orderId}${subtotal}${currency}${hash.toUpperCase()}`, hash);
+        setPayhereHash('bc4c96759c800813c8fc82c4a24f03d8'.toUpperCase());
+        console.log('payhereHash', payhereHash);
+    }, [subtotal, hash]);
+
 
     return (
         <MainLayout>
@@ -56,21 +96,32 @@ export default function CheckoutForm() {
                         </li>
                     </ol>
 
-                    <form id='checkoutForm' onSubmit={paymentForm.handleSubmit}>
+                    <form id='checkoutForm' method='POST' action="https://sandbox.payhere.lk/pay/checkout">
                         <div className="mt-6 sm:mt-8 lg:flex lg:items-start lg:gap-12 xl:gap-16">
                             <div className="min-w-0 flex-1 space-y-8">
+                                <input type="hidden" name="merchant_id" value={merchantId} />
+                                <input type="hidden" name="return_url" value={returnURl} />
+                                <input type="hidden" name="cancel_url" value={cancelUrl} />
+                                <input type="hidden" name="notify_url" value={notifyUrl} />
+                                <input type="hidden" name="order_id" value={orderId} />
+                                <input type="hidden" name="items" value="Cart items" />
+                                <input type="hidden" name="currency" value="LKR" />
+                                <input type="hidden" name="amount" value={subtotal} />
+                                <input type="hidden" name="hash" value={payhereHash} />
 
                                 <DeliveryDetails formObj={paymentForm as unknown as FormikProps<DeliveryFormFields>} />
 
-                                {/* <PaymentDetails />
+                                {/* <PaymentDetails />*/}
 
-                                <DeliveryMethod method='' onSelect={() => { }} /> */}
+                                {/* <DeliveryMethod method='' onSelect={() => { }} />  */}
 
                                 <div>
                                     <label htmlFor="voucher" className="mb-2 block text-sm font-medium text-gray-900 dark:text-white"> Enter a gift card, voucher or promotional code </label>
                                     <div className="flex max-w-md items-center gap-4">
-                                        <input type="text" id="voucher" className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" placeholder=""/>
-                                        <button type="button" className="flex items-center justify-center rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Apply</button>
+                                        <input type="text" id="voucher" className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-700 dark:text-white dark:placeholder:text-gray-400 dark:focus:border-blue-500 dark:focus:ring-blue-500" placeholder="" />
+                                        <button type="button" className="flex items-center justify-center rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4 focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">
+                                            Apply
+                                        </button>
                                     </div>
                                 </div>
 
@@ -82,8 +133,11 @@ export default function CheckoutForm() {
 
                                 <div className="space-y-3">
                                     <button type="submit"
-                                        className="flex w-full items-center justify-center rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4  focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800">Proceed to Payment</button>
-
+                                        className="flex w-full items-center justify-center rounded-lg bg-blue-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-blue-800 focus:outline-none focus:ring-4  focus:ring-blue-300 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+                                        disabled={Object.keys(paymentForm.errors).length > 0}
+                                    >
+                                        Proceed to Payment
+                                    </button>
                                     <p className="text-sm font-normal text-gray-500 dark:text-gray-400">One or more items in your cart require an account. {JSON.stringify(paymentForm.errors)}<a href="#" title="" className="font-medium text-blue-700 underline hover:no-underline dark:text-blue-500">Sign in or create an account now.</a>.</p>
                                 </div>
                             </div>

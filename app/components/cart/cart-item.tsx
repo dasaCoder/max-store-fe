@@ -1,11 +1,18 @@
 import { CartItem } from '@/app/lib/features/cart/cart-slice';
+import { on } from 'events';
 import React from 'react';
 
 interface CartItemProps {
     cartItem: CartItem;
+    onRemove: (id: string) => void;
 }
 
-const CartItemPlaceholder: React.FC<CartItemProps> = ({ cartItem }) => {
+const CartItemPlaceholder: React.FC<CartItemProps> = ({ cartItem, onRemove }) => {
+
+    const handleRemove = () => {
+        onRemove(cartItem.id);
+    };
+    
     return (
         <li key={cartItem.id} className="flex py-6">
             <div className="h-24 w-24 flex-shrink-0 overflow-hidden rounded-md border border-gray-200">
@@ -30,7 +37,9 @@ const CartItemPlaceholder: React.FC<CartItemProps> = ({ cartItem }) => {
                     <p className="text-gray-500">Qty {cartItem.quantity}</p>
 
                     <div className="flex">
-                        <button type="button" className="font-medium text-indigo-600 hover:text-indigo-500">
+                        <button 
+                            onClick={handleRemove}
+                            type="button" className="font-medium text-indigo-600 hover:text-indigo-500">
                             Remove
                         </button>
                     </div>

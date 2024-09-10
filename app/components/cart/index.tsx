@@ -6,15 +6,22 @@ import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useSelector } from 'react-redux'
 import { RootState } from '@/app/lib/store'
 import CartItemPlaceholder from './cart-item'
+import { useAppDispatch } from '@/app/lib/hooks'
+import { removeItem } from '@/app/lib/features/cart/cart-slice'
 
 
 export function Cart({ open }: { open: boolean }) {
   const [isOpen, setOpen] = useState(open)
   const {items, subtotal} = useSelector((state: RootState) => state.cart);
-
+  const dispatch = useAppDispatch();
+  
   useEffect(() => {
     setOpen(open)
   }, [open]);
+
+  const handleRemoveItem = (id: string) => {
+    dispatch(removeItem(id))
+  }
 
   return (
     <Dialog open={isOpen} onClose={setOpen} className="relative z-10 bg-white">
@@ -51,7 +58,7 @@ export function Cart({ open }: { open: boolean }) {
                     <div className="flow-root">
                       <ul role="list" className="-my-6 divide-y divide-gray-200">
                         {items.map((item) => (
-                          <CartItemPlaceholder cartItem={item} />
+                          <CartItemPlaceholder key={item.id} cartItem={item} onRemove={()=> handleRemoveItem(item.id)} />
                         ))}
                       </ul>
                     </div>
@@ -66,7 +73,7 @@ export function Cart({ open }: { open: boolean }) {
                   <p className="mt-0.5 text-sm text-gray-500">Shipping and taxes calculated at checkout.</p>
                   <div className="mt-6">
                     <a
-                      href="#"
+                      href="/checkout"
                       className="flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-white shadow-sm hover:bg-indigo-700"
                     >
                       Checkout

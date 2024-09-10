@@ -46,6 +46,9 @@ const config: Config = {
         800: '#2a4365',
         900: '#1A365D',
       },
+      red: {
+        500: '#AA0000'
+      }
     },
     extend: {
       backgroundImage: {
