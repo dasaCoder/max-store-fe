@@ -2,6 +2,8 @@
 import React from 'react';
 import Header from '../components/header';
 import { Footer } from '../components/footer';
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 
 const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
@@ -14,6 +16,7 @@ const MainLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
             <div className="bg-gray-900">
                 <Footer />
             </div>
+            <ToastContainer />
         </div>
     );
 };

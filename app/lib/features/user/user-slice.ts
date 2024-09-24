@@ -9,10 +9,14 @@ export interface User {
 
 export interface UserState {
     user: User | null;
+    isLoading: boolean;
+    isFetching: boolean;
 }
 
 const initialState: UserState = {
-    user: null
+    user: null,
+    isLoading: false,
+    isFetching: false
 }
 
 export const userSlice = createSlice({

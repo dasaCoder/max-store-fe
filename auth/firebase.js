@@ -6,6 +6,7 @@ export const authUser = async (email, password, signUp = false) => {
     if (signUp) {
       // await firebase.auth().createUserWithEmailAndPassword(email, password);
       return createUserWithEmailAndPassword(auth, email, password);
+      
     } else {
       return signInWithEmailAndPassword(auth, email, password);
       // await firebase.auth().signInWithEmailAndPassword(email, password);
