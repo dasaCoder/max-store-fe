@@ -2,14 +2,14 @@ import { initializeApp } from "firebase/app";
 import { getAuth } from "firebase/auth";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyAVlCZTI3njDTGLy3SkljED8dwu5_9mIV0",
-  authDomain: "burbstodo.firebaseapp.com",
-  databaseURL: "https://burbstodo-default-rtdb.firebaseio.com",
-  projectId: "burbstodo",
-  storageBucket: "burbstodo.appspot.com",
-  messagingSenderId: "439783622695",
-  appId: "1:439783622695:web:fe5a22d78f5362e46e2602",
-  measurementId: "G-BD6BLSNB99"
+  apiKey: process.env.NEXT_PUBLIC_APIKEY,
+  authDomain: process.env.NEXT_PUBLIC_AUTHDOMAIN,
+  databaseURL: process.env.NEXT_PUBLIC_DATABASEURL,
+  projectId: process.env.NEXT_PUBLIC_PROJECTID,
+  storageBucket: process.env.NEXT_PUBLIC_STORAGEBUCKET,
+  messagingSenderId: process.env.NEXT_PUBLIC_MESSAGINGSENDERID,
+  appId: process.env.NEXT_PUBLIC_APPID,
+  measurementId: process.env.NEXT_PUBLIC_MEASUREMENTID,
 };
 
 // Initialize Firebase
