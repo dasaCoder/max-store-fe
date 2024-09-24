@@ -8,10 +8,12 @@ import CategoryCarousel from "./components/category-carousel";
 import { Footer } from "./components/footer";
 import { useEffect, useState } from "react";
 import MainLayout from "./layouts/main";
+import { useAppSelector } from "./lib/hooks";
 
 
 export default function App() {
    const [itemList, setItemList] = useState<Item[]>([]);
+   const {isLoading, notification} = useAppSelector(state => state.app);
 
    useEffect(() => {
       fetch("http://localhost:3000/item")

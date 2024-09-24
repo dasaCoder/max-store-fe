@@ -2,27 +2,19 @@
 import React, { useState } from 'react';
 import MainLayout from '../layouts/main';
 import { useFormik } from 'formik';
-import loginFormSchema from '../lib/schema/login-form';
-import { authUser, fetchUserAvatar } from '../../auth/firebase';
-import { useDispatch } from 'react-redux';
-import { setUser } from '../lib/features/user/user-slice';
+import registerFormSchema from '../lib/schema/register-form';
+import { authUser } from '../../auth/firebase';
 
-const LoginPage: React.FC = () => {
-    const dispatch = useDispatch();
+const RegisterPage: React.FC = () => {
 
-    const loginForm = useFormik({
-        validationSchema: loginFormSchema,
+    const registerForm = useFormik({
+        validationSchema: registerFormSchema,
         initialValues: {
             email: '',
             password: ''
         },
         onSubmit: (values) => {
-            authUser(values.email, values.password, false)
-                .then(async (credentials) => {
-                    const imgUrl = await fetchUserAvatar(credentials.user!.uid);
-                    dispatch(setUser({ username: credentials.user!.displayName!, email: credentials.user!.email!, imgURL: imgUrl, token: '' }));
-                })
-                .catch((err) => { });
+            authUser(values.email, values.password, true);
         }
     })
 
@@ -36,12 +28,12 @@ const LoginPage: React.FC = () => {
                         className="mx-auto h-[80px] w-auto"
                     />
                     <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
-                        Sign in to your account
+                        Create to your account
                     </h2>
                 </div>
 
                 <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
-                    <form action="#" method="POST" className="space-y-6">
+                    <form className="space-y-6">
                         <div>
                             <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                                 Email address
@@ -51,14 +43,14 @@ const LoginPage: React.FC = () => {
                                     id="email"
                                     name="email"
                                     type="email"
-                                    value={loginForm.values.email}
-                                    onChange={loginForm.handleChange}
+                                    value={registerForm.values.email}
+                                    onChange={registerForm.handleChange}
                                     required
                                     autoComplete="email"
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
                                 />
-                                {loginForm.errors.email && (
-                                    <p className="text-red-500 text-sm">{loginForm.errors.email}</p>
+                                {registerForm.errors.email && (
+                                    <p className="text-red-500 text-sm">{registerForm.errors.email}</p>
                                 )}
                             </div>
                         </div>
@@ -79,29 +71,28 @@ const LoginPage: React.FC = () => {
                                     id="password"
                                     name="password"
                                     type="password"
-                                    value={loginForm.values.password}
-                                    onChange={loginForm.handleChange}
+                                    value={registerForm.values.password}
+                                    onChange={registerForm.handleChange}
                                     required
                                     autoComplete="current-password"
                                     className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6 pl-2"
                                 />
-                                {loginForm.errors.password && (
-                                    <p className="text-red-500 text-sm">{loginForm.errors.password}</p>
+                                {registerForm.errors.password && (
+                                    <p className="text-red-500 text-sm">{registerForm.errors.password}</p>
                                 )}
                             </div>
                         </div>
+
                     </form>
-                    <div className='mt-4'>
-                        <button
-                            type='submit'
-                            onClick={() => loginForm.handleSubmit()}
-                            className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-                        >
-                            Sign in
-                        </button>
-                    </div>
-
-
+                        <div>
+                            <button
+                                type='submit'
+                                onClick={() => registerForm.handleSubmit()}
+                                className="flex w-full justify-center rounded-md bg-indigo-600 px-3 py-1.5 text-sm font-semibold leading-6 text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+                            >
+                                Sign in
+                            </button>
+                        </div>
 
                     <p className="mt-10 text-center text-sm text-gray-500">
                         Not a member?{' '}
@@ -116,4 +107,4 @@ const LoginPage: React.FC = () => {
     );
 };
 
-export default LoginPage;
+export default RegisterPage;

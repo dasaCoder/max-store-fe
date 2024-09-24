@@ -1,15 +1,22 @@
 'use client';
 
 import React, { useEffect, useState } from 'react'
-import { Dialog, DialogPanel } from '@headlessui/react'
+import { Dialog, DialogPanel, Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { usePathname } from 'next/navigation';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/app/lib/store';
 import { Cart } from '@/app/components/cart';
 import { useRouter } from 'next/navigation';
+import { logoutUser, getUserInfo } from '../../../auth/firebase';
 
 interface HeaderProps {
+}
+
+interface User {
+  username: string;
+  email: string;
+  imgURL: string;
 }
 
 const Header: React.FC<HeaderProps> = () => {
@@ -17,6 +24,7 @@ const Header: React.FC<HeaderProps> = () => {
   const [navBg, setNavBg] = useState(false);
   const [isCartOpen, setIsCartOpen] = useState(false);
   const [search, setSearch] = useState('');
+  const { user } = useSelector((state: RootState) => state.user);
 
   const router = useRouter();
   const pathname = usePathname();
@@ -28,8 +36,19 @@ const Header: React.FC<HeaderProps> = () => {
     window.scrollY >= 200 ? setNavBg(true) : setNavBg(false);
   }
 
+  const handleAuth = () => {
+    router.push('/login');
+  }
+
+  const handleLogout = () => {
+    logoutUser().then(() => {
+      router.push('/');
+    });
+  }
+
   useEffect(() => {
     window.addEventListener('scroll', changeNavBg);
+
     return () => {
       window.removeEventListener('scroll', changeNavBg);
     }
@@ -76,7 +95,7 @@ const Header: React.FC<HeaderProps> = () => {
           </button>
         </div>
 
-        <div className="hidden lg:flex lg:gap-x-12">
+        {(!isHomePage || navBg) && <div className="hidden lg:flex lg:gap-x-12">
           <div className="relative">
             <input
               value={search}
@@ -91,7 +110,7 @@ const Header: React.FC<HeaderProps> = () => {
               </svg>
             </button>
           </div>
-        </div>
+        </div>}
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
           <button onClick={() => setIsCartOpen(!isCartOpen)} className="relative pr-2">
@@ -101,8 +120,35 @@ const Header: React.FC<HeaderProps> = () => {
             </span>
           </button>
 
+          <Popover>
+            <PopoverButton className="block text-sm/6 font-dark text-dark/50 focus:outline-none data-[active]:text-white data-[hover]:text-white data-[focus]:outline-1 data-[focus]:outline-white">
+
+              {user?.imgURL ? <img src={user.imgURL} className='w-[30px] rounded-full' alt="" /> : <img src="/images/icons/icon-user.png" className='w-[30px]' alt="" />}
+
+            </PopoverButton>
+            <PopoverPanel
+              transition
+              anchor="bottom"
+              className="divide-y divide-white/5 rounded-xl bg-white text-sm/6 transition duration-200 ease-in-out [--anchor-gap:var(--spacing-5)] data-[closed]:-translate-y-1 data-[closed]:opacity-0 z-50"
+            >
+              <div className="">
+                {
+                  user ?
+
+                    <button className="block rounded-lg py-2 px-3 pointer-curser" onClick={handleLogout}>
+                      <p className="font-semibold text-dark">Logout</p>
+                    </button>
+
+                    : <button className="block rounded-lg py-2 px-3 pointer-curser" onClick={handleAuth}>
+                      <p className="font-semibold text-dark">Login</p>
+                    </button>
+                }
+              </div>
+
+            </PopoverPanel>
+          </Popover>
           <button>
-            <img src="/images/icons/icon-user.png" className='w-[30px]' alt="" />
+
           </button>
         </div>
       </nav>

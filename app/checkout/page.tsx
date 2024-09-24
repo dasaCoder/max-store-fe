@@ -8,7 +8,7 @@ import OrderSummary from '../components/checkout/order-summary';
 import DeliveryMethod from '../components/checkout/delivery-method';
 import MainLayout from '../layouts/main';
 import { FormikProps, useFormik } from 'formik';
-import checkoutFormSchema from '../schema/checkout-form';
+import checkoutFormSchema from '../lib/schema/checkout-form';
 import * as crypto from 'crypto';
 import axios from 'axios';
 
