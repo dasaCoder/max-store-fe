@@ -1,8 +1,8 @@
 import React from 'react';
 import Item from './item';
-import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import MSlider from '../slider';
 
 interface CarouselProps {
     items: Item[];
@@ -52,11 +52,11 @@ const ItemCarousel: React.FC<CarouselProps> = ({ items, title }) => {
     return (
         <div>
             {title && <p className='subpixel-antialiased text-dark text-3xl pl-2 pt-2 pb-3'>{title}</p>}
-            <Slider {...settings}>
+            <MSlider settings={settings}>
                 {items.map((item, index) => (
                     <Item key={index} {...item} />
                 ))}
-            </Slider>
+            </MSlider>
         </div>
     );
 };

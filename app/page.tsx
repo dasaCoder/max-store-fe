@@ -1,26 +1,23 @@
-'use client'
-
-import Head from "next/head"
 import MainCover from "./components/main-cover"
-import Header from "./components/header"
 import ItemCarousel from "./components/item-carousel";
 import CategoryCarousel from "./components/category-carousel";
-import { Footer } from "./components/footer";
-import { useEffect, useState } from "react";
 import MainLayout from "./layouts/main";
-import { useAppSelector } from "./lib/hooks";
 
 
-export default function App() {
-   const [itemList, setItemList] = useState<Item[]>([]);
-   const {isLoading, notification} = useAppSelector(state => state.app);
+export default async function App() {
+   // const [itemList, setItemList] = useState<Item[]>([]);
+   // const {isLoading, notification} = useAppSelector(state => state.app);
 
-   useEffect(() => {
-      fetch("http://localhost:3000/item")
-         .then(response => response.json())
-         .then(data => setItemList(data))
-         .catch(error => console.log(error));
-   }, []);
+   const data = await fetch("http://localhost:3000/item")
+   .then(response => response.json())
+   .catch(error => console.log(error));
+
+   // useEffect(() => {
+   //    fetch("http://localhost:3000/item")
+   //       .then(response => response.json())
+   //       .then(data => setItemList(data))
+   //       .catch(error => console.log(error));
+   // }, []);
 
    const categoryList: CategoryItem[] = [
       {
@@ -41,11 +38,12 @@ export default function App() {
       <MainLayout>
          <MainCover />
          <div className="container mx-auto">
-            <ItemCarousel items={itemList} />
+            <h1></h1>
+            <ItemCarousel items={data} />
             <CategoryCarousel items={categoryList} />
             <div className="text-dark">
             </div>
-            <ItemCarousel title="New Arrivals" items={itemList} />
+            <ItemCarousel title="New Arrivals" items={data} />
          </div>
       </MainLayout>
    );

@@ -3,12 +3,14 @@ import Item from './item';
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+import MSlider from '../slider';
 
 interface CarouselProps {
     items: CategoryItem[];
 }
 
-const CatetoryCarousel: React.FC<CarouselProps> = ({ items }) => {
+export default async function CategoryCarousel({ items }: CarouselProps) {
+
 
     const settings = {
         dots: true,
@@ -40,16 +42,11 @@ const CatetoryCarousel: React.FC<CarouselProps> = ({ items }) => {
             }
         ]
     };
-
     return (
-        <div>
-            <Slider {...settings}>
-                {items.map((item, index) => (
-                    <Item key={index} {...item} />
-                ))}
-            </Slider>
-        </div>
+        <MSlider settings={settings}>
+            {items.map((item, index) => (
+                <Item key={index} {...item} />
+            ))}
+        </MSlider>
     );
-};
-
-export default CatetoryCarousel;
+}

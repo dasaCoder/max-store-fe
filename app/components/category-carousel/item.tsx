@@ -1,8 +1,9 @@
 import React from 'react';
+import Wrapper from './wrapper';
 
 const Item: React.FC<CategoryItem> = ({ name, imgUrl}) => {
     return (
-        <div className={`border-r border-secondary bg-peach text-center h-[350px] bg-cover content-center`} style={{ backgroundImage: `url(${imgUrl})` }}>
+        <Wrapper imgUrl={imgUrl}>
             <div className="flex flex-col backdrop-grayscale">
                 <div className='pt-4 pl-2 ≈'>
                     <h3 className='text-white text-3xl font-medium subpixel-antialiased font-mono drop-shadow'>{name}</h3>
@@ -14,7 +15,7 @@ const Item: React.FC<CategoryItem> = ({ name, imgUrl}) => {
                 </div>
             </div>
             {/* <img src={imgUrl} alt={name} className='w-full backdrop-opacity-10 backdrop-invert' /> */}
-        </div>
+        </Wrapper>
     );
 };
 
