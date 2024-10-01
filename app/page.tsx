@@ -1,23 +1,14 @@
-import MainCover from "./components/main-cover"
-import ItemCarousel from "./components/item-carousel";
-import CategoryCarousel from "./components/category-carousel";
+import ItemCarousel from "@/app/components/item-carousel";
+import CategoryCarousel from "@/app/components/category-carousel";
 import MainLayout from "./layouts/main";
+import MainCover from "@/app/components/main-cover";
 
 
 export default async function App() {
-   // const [itemList, setItemList] = useState<Item[]>([]);
-   // const {isLoading, notification} = useAppSelector(state => state.app);
 
    const data = await fetch("http://localhost:3000/item")
    .then(response => response.json())
    .catch(error => console.log(error));
-
-   // useEffect(() => {
-   //    fetch("http://localhost:3000/item")
-   //       .then(response => response.json())
-   //       .then(data => setItemList(data))
-   //       .catch(error => console.log(error));
-   // }, []);
 
    const categoryList: CategoryItem[] = [
       {

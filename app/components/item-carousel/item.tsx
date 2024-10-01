@@ -3,24 +3,12 @@ import React from 'react';
 
 const Item: React.FC<Item> = ({ name, price, imgUrl, _id }) => {
 
-    const [imageLoaded, setImageLoaded] = React.useState(false);
-
-    const handleImageLoad = () => {
-        setImageLoaded(true);
-    };
-
     return (
         <div style={{ background: '#ffffff' }} className='border-r border-secondary'>
-            {!imageLoaded && (
-                <div className='w-full h-60 flex items-center justify-center bg-grey-500'>
-                    <div className='animate-spin rounded-full h-10 w-10 border-t-2 border-b-2 border-primary'></div>
-                </div>
-            )}
             <img
                 src={imgUrl}
                 alt={name}
-                className={`w-full ${imageLoaded ? '' : 'invisible h-0'}`}
-                onLoad={handleImageLoad}
+                className={`w-full`}
             />
             <div className="flex justify-between">
                 <div className='pt-4 pl-2'>

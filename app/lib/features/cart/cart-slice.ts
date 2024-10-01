@@ -15,12 +15,12 @@ export interface CartState {
 }
 
 const initialState: CartState = {
-    items: [],
-    subtotal: calculateSubtotal([])
+    items: JSON.parse(localStorage.getItem('cartItems') || '[]'),
+    subtotal: calculateSubtotal(JSON.parse(localStorage.getItem('cartItems') || '[]'))
 }
 
 const updateLocalStorage = (items: CartItem[]) => {
-    // localStorage.setItem('cartItems', JSON.stringify(items));
+    localStorage.setItem('cartItems', JSON.stringify(items));
 }
 
 export const cartSlice = createSlice({

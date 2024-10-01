@@ -1,30 +1,23 @@
-'use client';
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import MainLayout from '../../layouts/main';
 import { addItem } from '@/app/lib/features/cart/cart-slice';
 import { useAppDispatch } from '@/app/lib/hooks';
 import { Disclosure, DisclosureButton, DisclosurePanel } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/16/solid';
+import AddToCartBtn from '@/app/components/add-to-cart-btn';
 import ItemCarousel from '@/app/components/item-carousel';
 
-const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
-    const dispatch = useAppDispatch();
-    const [item, setItem] = useState<Item | undefined>(undefined);
+const ItemPage: React.FC<any> = async ({ params }: { params: { id: string } }) => {
+    // const dispatch = useAppDispatch();
+    // const [item, setItem] = useState<Item | undefined>(undefined);
 
-    const [suggestedItemList, setSuggestedItemList] = useState<Item[]>([]);
+    // const [suggestedItemList, setSuggestedItemList] = useState<Item[]>([]);
 
-
-    useEffect(() => {
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/item/${params.id}`)
+    const item = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/item/${params.id}`)
             .then(response => response.json())
-            .then(data => setItem(data))
             .catch(error => console.log(error));
 
-        fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/item`)
-            .then(response => response.json())
-            .then(data => setSuggestedItemList(data))
-            .catch(error => console.log(error));
-    }, []);
+    const suggestedItemList = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_HOST}/item`).then(response => response.json()).catch(error => console.log(error));
 
     return (
         <MainLayout>
@@ -79,22 +72,7 @@ const ItemPage: React.FC<any> = ({ params }: { params: { id: string } }) => {
 
                     {/* <ColorSelector /> */}
 
-                    <button
-                        className="mt-6 bg-indigo-600 text-white py-3 px-6 rounded-lg w-full hover:bg-indigo-700 transition-colors"
-                        onClick={() => {
-                            if (item) {
-                                dispatch(addItem({
-                                    id: item._id,
-                                    name: item.name,
-                                    price: item.price,
-                                    imgUrl: item.imgUrl,
-                                    quantity: 1
-                                }))
-                            }
-                        }}
-                    >
-                        Add to bag
-                    </button>
+                    <AddToCartBtn item={item} />
 
                     <div className="w-full pt-5 text-dark">
                         <div className="mx-auto w-full max-w-lg divide-y divide-dark/5 rounded-xl bg-dark/5">
