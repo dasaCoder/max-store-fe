@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { use, useEffect, useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
 import { XMarkIcon } from '@heroicons/react/24/outline'
 import { useSelector } from 'react-redux'
@@ -8,23 +8,25 @@ import { RootState } from '@/app/lib/store'
 import CartItemPlaceholder from './cart-item'
 import { useAppDispatch } from '@/app/lib/hooks'
 import { removeItem } from '@/app/lib/features/cart/cart-slice'
+import { toggleCart } from '@/app/lib/features/app/app-slice'
 
 
-export function Cart({ open }: { open: boolean }) {
-  const [isOpen, setOpen] = useState(open)
+export function Cart() {
   const {items, subtotal} = useSelector((state: RootState) => state.cart);
+  const {isCartOpen} = useSelector((state: RootState) => state.app);
+
   const dispatch = useAppDispatch();
-  
-  useEffect(() => {
-    setOpen(open)
-  }, [open]);
 
   const handleRemoveItem = (id: string) => {
     dispatch(removeItem(id))
   }
 
+  const handleCloseCart = () => {
+    dispatch(toggleCart());
+  }
+
   return (
-    <Dialog open={isOpen} onClose={setOpen} className="relative z-10 bg-white">
+    <Dialog open={isCartOpen} onClose={handleCloseCart} className="relative z-10 bg-white">
       <DialogBackdrop
         transition
         className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity duration-500 ease-in-out data-[closed]:opacity-0"
@@ -44,7 +46,7 @@ export function Cart({ open }: { open: boolean }) {
                     <div className="ml-3 flex h-7 items-center">
                       <button
                         type="button"
-                        onClick={() => setOpen(false)}
+                        onClick={() => handleCloseCart()}
                         className="relative -m-2 p-2 text-gray-400 hover:text-gray-500"
                       >
                         <span className="absolute -inset-0.5" />
@@ -84,7 +86,7 @@ export function Cart({ open }: { open: boolean }) {
                       or{' '}
                       <button
                         type="button"
-                        onClick={() => setOpen(false)}
+                        onClick={() => handleCloseCart()}
                         className="font-medium text-indigo-600 hover:text-indigo-500"
                       >
                         Continue Shopping

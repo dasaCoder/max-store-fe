@@ -1,5 +1,6 @@
 'use client';
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
+import { set } from "firebase/database";
 
 export interface Notification {
     message: string;
@@ -9,11 +10,15 @@ export interface Notification {
 export interface App {
     isLoading: boolean;
     notification: Notification | null;
+    isCartOpen: boolean;
+    currencyCode: string;
 }
 
 const initialState: App = {
     isLoading: false,
-    notification: null
+    notification: null,
+    isCartOpen: false,
+    currencyCode: 'LKR'
 }
 
 export const appSlice = createSlice({
@@ -28,9 +33,12 @@ export const appSlice = createSlice({
         },
         removeNotification: (state) => {
             state.notification = null;
+        },
+        toggleCart: (state) => {
+            state.isCartOpen = !state.isCartOpen;
         }
     }
 });
 
-export const { setLoading, setNotification, removeNotification } = appSlice.actions;
+export const { setLoading, setNotification, removeNotification, toggleCart } = appSlice.actions;
 export default appSlice.reducer;

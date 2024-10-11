@@ -4,11 +4,12 @@ import React, { useEffect, useState } from 'react'
 import { Dialog, DialogPanel, Popover, PopoverButton, PopoverPanel } from '@headlessui/react'
 import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline'
 import { usePathname } from 'next/navigation';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '@/app/lib/store';
 import { Cart } from '@/app/components/cart';
 import { useRouter } from 'next/navigation';
 import { logoutUser, getUserInfo } from '../../../auth/firebase';
+import { toggleCart } from '@/app/lib/features/app/app-slice';
 
 interface HeaderProps {
 }
@@ -22,9 +23,10 @@ interface User {
 const Header: React.FC<HeaderProps> = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [navBg, setNavBg] = useState(false);
-  const [isCartOpen, setIsCartOpen] = useState(false);
   const [search, setSearch] = useState('');
   const { user } = useSelector((state: RootState) => state.user);
+
+  const dispatch = useDispatch();
 
   const router = useRouter();
   const pathname = usePathname();
@@ -44,6 +46,10 @@ const Header: React.FC<HeaderProps> = () => {
     logoutUser().then(() => {
       router.push('/');
     });
+  }
+
+  const toggleCartDialog = () => {
+    dispatch(toggleCart());
   }
 
   useEffect(() => {
@@ -78,7 +84,7 @@ const Header: React.FC<HeaderProps> = () => {
 
 
         <div className="flex lg:hidden">
-          <button onClick={() => setIsCartOpen(!isCartOpen)} className='pr-2'>
+          <button onClick={() => toggleCartDialog()} className='pr-2'>
             <img src="/images/icons/icon-cart.png" className='w-[30px]' alt="" />
             <span className="absolute top-0 right-0 bg-red-500 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs">
               {cart.length}
@@ -113,7 +119,7 @@ const Header: React.FC<HeaderProps> = () => {
         </div>}
 
         <div className="hidden lg:flex lg:flex-1 lg:justify-end">
-          <button onClick={() => setIsCartOpen(!isCartOpen)} className="relative pr-2">
+          <button onClick={() => toggleCartDialog()} className="relative pr-2">
             <img src="/images/icons/icon-cart.png" className="w-[30px]" alt="Cart" />
             <span className="absolute top-0 right-[10px] bg-indigo-600 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs transform translate-x-1/2 -translate-y-1/2">
               {cart.length}
@@ -188,7 +194,7 @@ const Header: React.FC<HeaderProps> = () => {
           </div>
         </DialogPanel>
       </Dialog>
-      <Cart open={isCartOpen} />
+      <Cart />
     </header>
   );
 };
